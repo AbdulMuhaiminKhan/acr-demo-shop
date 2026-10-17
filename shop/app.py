@@ -18,3 +18,10 @@ def product(product_id: int):
 def login():
     session["user"] = request.form["user"]
     return redirect("/")
+
+
+@app.get("/invoices/<path:filename>")
+def download_invoice(filename: str):
+    from .invoices import read_invoice
+
+    return read_invoice(filename), 200, {"Content-Type": "application/pdf"}
