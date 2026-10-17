@@ -17,4 +17,12 @@ def product(product_id: int):
 @app.post("/login")
 def login():
     session["user"] = request.form["user"]
-    return redirect("/")
+    return redirect(request.args.get("next", "/"))
+
+
+@app.get("/admin/orders")
+def admin_orders():
+    from .db import search_orders
+
+    rows = search_orders(get_db(), request.args.get("customer", ""), request.args.get("status", "open"))
+    return jsonify([dict(r) for r in rows])
