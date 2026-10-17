@@ -18,3 +18,10 @@ def product(product_id: int):
 def login():
     session["user"] = request.form["user"]
     return redirect("/")
+
+
+@app.post("/products/<int:product_id>/image")
+def upload_image(product_id: int):
+    from .images import make_thumbnail
+
+    return jsonify({"thumbnail": make_thumbnail(request.form["filename"])})
