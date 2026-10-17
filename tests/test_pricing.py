@@ -14,3 +14,21 @@ def test_line_total_rejects_negative_quantity():
 
 def test_order_total_adds_tax():
     assert order_total([(10.0, 1)], tax_rate=0.1) == 11.0
+
+
+def test_apply_discount():
+    from shop.pricing import apply_discount
+
+    assert apply_discount(100.0, 25) == 75.0
+
+
+@pytest.mark.parametrize("bad", [-1, 101])
+def test_apply_discount_rejects_out_of_range(bad):
+    from shop.pricing import apply_discount
+
+    with pytest.raises(ValueError):
+        apply_discount(100.0, bad)
+
+
+def test_order_total_with_discount():
+    assert order_total([(10.0, 2)], tax_rate=0.0, discount=50) == 10.0
